@@ -4,12 +4,13 @@ import java.awt.Dimension;
 import javax.swing.JButton;
 
 public class LightButton extends JButton {
-	public static Dimension SIZE = new Dimension (50, 50);
+	public static Dimension SIZE = new Dimension (75, 75);
 	private boolean isOn = false;
 	
 	public LightButton(){
 		isOn = false;
 		setBackground(Color.BLACK);
+		setPreferredSize(SIZE);
 	}
 	
 	public boolean getIsOn(){
