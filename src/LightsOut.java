@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -43,7 +45,16 @@ public class LightsOut extends JFrame {
 		add(gamePanel, BorderLayout.CENTER);
 		for (int r = 0; r < GRIDSIZE; r++){
 			for (int c = 0; c < GRIDSIZE; c++){
-				lightBoard[r][c] = new LightButton();
+				lightBoard[r][c] = new LightButton(r, c);
+				lightBoard[r][c].addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						LightButton button = (LightButton) e.getSource();
+						int row = button.getRow();
+						int col = button.getCol();
+						buttonClicked(row, col);
+					}
+				});
 				gamePanel.add(lightBoard[r][c]);
 			}
 		}
@@ -55,7 +66,7 @@ public class LightsOut extends JFrame {
 	}
 	
 	public void buttonClicked(int r, int c){
-		
+		lightBoard[r][c].toggle();
 	}
 	
 	public void promptForNewGame(){
