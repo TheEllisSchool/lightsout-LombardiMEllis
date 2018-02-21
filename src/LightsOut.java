@@ -9,6 +9,7 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
@@ -99,7 +100,9 @@ public class LightsOut extends JFrame {
 		
 		//check neighbors & toggle
 		if (valid(r - 1, c)){
+			//System.out.println("" + (r - 1) + c + lightBoard[r-1][c].getIsOn());
 			lightBoard[r-1][c].toggle();
+			//System.out.println("" + (r - 1) + c + lightBoard[r-1][c].getIsOn());
 		}
 		if (valid(r + 1, c)){
 			lightBoard[r+1][c].toggle();
@@ -111,13 +114,49 @@ public class LightsOut extends JFrame {
 			lightBoard[r][c + 1].toggle();
 		}
 		
-		checkForWin();
+
+		if (checkForWin()){
+			String message = "Congratulations!  You did it!";
+			promptForNewGame(message);
+		}
 		
 	}
 	
-	public void checkForWin(){
+	public boolean checkForWin(){
+		//checks individually
+//		if (lightBoard[0][0].getIsOn()
+//				&& lightBoard[0][1].getIsOn()
+//				&& lightBoard[0][2].getIsOn()
+//				&& lightBoard[1][0].getIsOn()
+//				&& lightBoard[1][2].getIsOn()
+//				&& lightBoard[2][0].getIsOn()
+//				&& lightBoard[2][1].getIsOn()
+//				&& lightBoard[2][2].getIsOn()
+//				&& !lightBoard[1][1].getIsOn()){
+//			return true;
+//		} else {
+//			return false;
+//		}
 		
-				
+		boolean won = true;
+		for (int r = 0; r < GRIDSIZE; r++){
+			for (int c = 0; c < GRIDSIZE; c ++){
+				if (r == 0 || c == 0
+						|| r == GRIDSIZE - 1 || c == GRIDSIZE -1
+						&& (r != GRIDSIZE/2  && c != GRIDSIZE/2)){
+					if (!lightBoard[r][c].getIsOn()){
+						won = false;
+					}
+				}
+			}
+		}
+		
+		if (!lightBoard[GRIDSIZE/2][GRIDSIZE/2].getIsOn()){
+			won = false;
+		}
+		
+		return won;
+		
 	}
 	
 	public boolean valid(int r, int c){
@@ -129,8 +168,13 @@ public class LightsOut extends JFrame {
 		}
 	}
 	
-	public void promptForNewGame(){
-		
+	public void promptForNewGame(String message){
+		int option = JOptionPane.showConfirmDialog(this, message, "Play Again?", JOptionPane.YES_NO_OPTION);
+		if (option == JOptionPane.YES_OPTION) {
+			boardSetup();
+		} else {
+			System.exit(0);
+		}
 	}
 
 	public static void main(String[] args) {
