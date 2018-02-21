@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,6 +20,8 @@ public class LightsOut extends JFrame {
 	public LightsOut(){
 
 		initGUI();
+		
+		boardSetup();
 		
 		setTitle("Lights Out");
 		setSize(200, 100); //pixels
@@ -59,17 +62,42 @@ public class LightsOut extends JFrame {
 			}
 		}
 		add(gamePanel, BorderLayout.CENTER);
+		
 	}
 	
 	public void boardSetup(){
+		//reset all lights
+		for (int r = 0; r < GRIDSIZE; r++){
+			for (int c = 0; c < GRIDSIZE; c++){
+				lightBoard[r][c].reset();
+			}
+		}
+		//turn on outside lights
+		for (int r = 0; r < GRIDSIZE; r++){
+			for (int c = 0; c < GRIDSIZE; c++){
+				if ( r == 0 || c == 0 || r == GRIDSIZE - 1 || c == GRIDSIZE -1
+						&& !lightBoard[r][c].getIsOn())
+				lightBoard[r][c].toggle();
+			}
+		}
 		
+
+		Random rand = new Random();
+		//generate a random number of "steps" between 10 and 20
+		int steps = rand.nextInt(10) + 10;
+		for (int i = 0; i < steps; i++){
+			//generate a random row & col to toggle
+			int pickRow = rand.nextInt(GRIDSIZE);
+			int pickCol = rand.nextInt(GRIDSIZE);
+			lightBoard[pickRow][pickCol].toggle();
+		}
 	}
 	
 	public void buttonClicked(int r, int c){
 		//toggle button
 		lightBoard[r][c].toggle();
 		
-		//check neighbors
+		//check neighbors & toggle
 		if (valid(r - 1, c)){
 			lightBoard[r-1][c].toggle();
 		}
@@ -83,6 +111,13 @@ public class LightsOut extends JFrame {
 			lightBoard[r][c + 1].toggle();
 		}
 		
+		checkForWin();
+		
+	}
+	
+	public void checkForWin(){
+		
+				
 	}
 	
 	public boolean valid(int r, int c){
