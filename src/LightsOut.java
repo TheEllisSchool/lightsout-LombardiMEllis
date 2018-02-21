@@ -66,7 +66,32 @@ public class LightsOut extends JFrame {
 	}
 	
 	public void buttonClicked(int r, int c){
+		//toggle button
 		lightBoard[r][c].toggle();
+		
+		//check neighbors
+		if (valid(r - 1, c)){
+			lightBoard[r-1][c].toggle();
+		}
+		if (valid(r + 1, c)){
+			lightBoard[r+1][c].toggle();
+		}
+		if (valid(r, c - 1)){
+			lightBoard[r][c - 1].toggle();
+		}
+		if (valid(r, c + 1)){
+			lightBoard[r][c + 1].toggle();
+		}
+		
+	}
+	
+	public boolean valid(int r, int c){
+		if (r < GRIDSIZE && r >= 0
+				&& c < GRIDSIZE && c >= 0){
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public void promptForNewGame(){
